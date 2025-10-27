@@ -2,7 +2,6 @@ name: Push Branch Validator
 
 on:
   push:
-    # Ejecuta en push a cualquier rama EXCEPTUANDO main y master
     branches-ignore:
       - 'main'
       - 'master'
@@ -22,12 +21,10 @@ jobs:
           BRANCH="${{ github.ref_name }}"
           echo "Branch detected: '$BRANCH'"
 
-          # Regex que acepta los prefijos feature/, bugfix/, hotfix/
           if echo "$BRANCH" | grep -Eq '^(feature/|bugfix/|hotfix/)'; then
             echo "✅ El nombre de rama '$BRANCH' cumple la convención."
             exit 0
           else
-            # Marca el job como fallido y muestra mensaje de error visible en GitHub Actions
             echo "::error::Nombre de rama inválido: '$BRANCH'. Debe comenzar con 'feature/', 'bugfix/' o 'hotfix/'."
             exit 1
           fi
